@@ -14,7 +14,7 @@ Pockethernet provides official firmware update tools for Windows and Linux, but 
 
 The official Linux updater is distributed as a Linux executable. macOS cannot run this executable directly because it is not a macOS binary.
 
-This project provides a Python based updater that works natively on macOS by using `pyserial` to communicate with the Pockethernet over USB.
+This project provides Python based updater scripts that work natively on macOS by using `pyserial` to communicate with the Pockethernet over USB.
 
 ## ⚠️ Important warning
 
@@ -38,9 +38,22 @@ The MIT License in this project only applies to the code provided here. Pockethe
 
 ## Supported firmware versions
 
-| Firmware version | Status | Updater source                                                                   | Instructions                     |
-| ---------------- | ------ | -------------------------------------------------------------------------------- | -------------------------------- |
-| v33              | Tested | [`v33/pockethernet_v33_macos_updater.py`](v33/pockethernet_v33_macos_updater.py) | [`v33/README.md`](v33/README.md) |
+<table>
+  <thead>
+    <tr>
+      <th>Firmware version</th>
+      <th>Status</th>
+      <th>Release</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>v33</td>
+      <td>Tested</td>
+      <td><a href="https://github.com/emtronictech/pockethernet-v1-macos-updater/releases/tag/v33">Release v33</a></td>
+    </tr>
+  </tbody>
+</table>
 
 Future firmware versions can be added when their official updater layout has been inspected and tested.
 
@@ -62,51 +75,23 @@ Install `pyserial` with pip:
 python3 -m pip install pyserial
 ```
 
-For version specific usage instructions, open the README for the firmware version you want to install.
+## How to use
 
-For v33:
+Choose the firmware version you want to install from the supported versions table.
 
-[`v33/README.md`](v33/README.md)
+Each version has its own instructions and updater script.
 
-## Basic usage overview
-
-For v33, download the official Pockethernet v33 Linux updater from:
-
-https://pockethernet.com/firmware.html
-
-The required official updater file is expected to be:
+General process:
 
 ```text
-pockethernet-v33-fwupgrade
+Download the official Pockethernet Linux updater for the firmware version
+Download the matching macOS Python updater script from this project
+Place both files in the same directory on your Mac
+Run the dry run command first
+Flash the firmware only if the dry run succeeds
 ```
 
-Place the official updater file next to the matching Python updater script on your Mac.
-
-Then list available serial ports:
-
-```bash
-python3 pockethernet_v33_macos_updater.py --list-ports
-```
-
-On macOS, the Pockethernet usually appears as something like:
-
-```text
-/dev/cu.usbmodemXXXX
-```
-
-Run a dry run first:
-
-```bash
-python3 pockethernet_v33_macos_updater.py --dry-run dummy ./pockethernet-v33-fwupgrade
-```
-
-If the dry run succeeds, flash the firmware:
-
-```bash
-python3 pockethernet_v33_macos_updater.py /dev/cu.usbmodemXXXX ./pockethernet-v33-fwupgrade
-```
-
-Replace `/dev/cu.usbmodemXXXX` with the actual serial port shown on your Mac.
+For exact commands, serial port instructions and version specific details, read the README for the firmware version you want to install.
 
 ## macOS serial port note
 
@@ -127,22 +112,19 @@ The updater performs the following steps:
 Open the Pockethernet USB serial port
 Read the firmware payloads from the official Linux updater file
 Enter the Pockethernet firmware update flow
-Write the main firmware payload
-Write the second small payload
+Write the firmware payloads
 Ask the device to validate the firmware
 Set the Pockethernet LEDs green when validation succeeds
 Set the Pockethernet LEDs red when an error occurs
 ```
 
-The Python script contains the update protocol implementation, but it does not contain the firmware itself.
+The Python updater scripts contain the update protocol implementation, but they do not contain the firmware itself.
 
 ## Technical summary
 
-The v33 updater script was created by inspecting the official Pockethernet v33 Linux updater.
+The official Linux updater is an x86_64 Linux executable. macOS cannot run it directly.
 
-The official Linux updater is an x86_64 Linux executable. Inside that executable are two embedded firmware payloads.
-
-The macOS Python updater extracts those payloads from the official updater file and sends them to the device over USB CDC serial.
+The macOS Python updater extracts embedded firmware payloads from the official Linux updater file and sends them to the device over USB CDC serial.
 
 The update protocol uses:
 
@@ -155,7 +137,7 @@ CRC16 validation
 Little endian command values
 ```
 
-The v33 script is intentionally version specific. It expects the known v33 updater layout and refuses to continue if the expected firmware payloads cannot be extracted.
+Each updater script is intentionally version specific. A script should only be used with the official Linux updater file for the matching firmware version.
 
 ## Adding support for another firmware version
 
@@ -169,15 +151,44 @@ A new version should only be marked as tested after it has been successfully use
 
 Before flashing, check the following:
 
-| Check                 | Description                                                                                  |
-| --------------------- | -------------------------------------------------------------------------------------------- |
-| Official updater file | Download the official Pockethernet Linux updater from https://pockethernet.com/firmware.html |
-| Matching version      | Use the script that matches the firmware version                                             |
-| Dry run               | Run the dry run command first                                                                |
-| USB cable             | Use a reliable USB cable                                                                     |
-| Power                 | Keep your Mac connected to power if possible                                                 |
-| Sleep mode            | Do not let your Mac go to sleep during flashing                                              |
-| Connection            | Do not disconnect the Pockethernet during flashing                                           |
+<table>
+  <thead>
+    <tr>
+      <th>Check</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Official updater file</td>
+      <td>Download the official Pockethernet Linux updater from https://pockethernet.com/firmware.html</td>
+    </tr>
+    <tr>
+      <td>Matching version</td>
+      <td>Use the script that matches the firmware version</td>
+    </tr>
+    <tr>
+      <td>Dry run</td>
+      <td>Run the dry run command first</td>
+    </tr>
+    <tr>
+      <td>USB cable</td>
+      <td>Use a reliable USB cable</td>
+    </tr>
+    <tr>
+      <td>Power</td>
+      <td>Keep your Mac connected to power if possible</td>
+    </tr>
+    <tr>
+      <td>Sleep mode</td>
+      <td>Do not let your Mac go to sleep during flashing</td>
+    </tr>
+    <tr>
+      <td>Connection</td>
+      <td>Do not disconnect the Pockethernet during flashing</td>
+    </tr>
+  </tbody>
+</table>
 
 If the update fails, do not repeatedly retry with random files or unknown firmware versions. Use only the matching official updater file for the script version.
 
@@ -190,5 +201,3 @@ The license only applies to the code in this project. Pockethernet firmware and 
 ## Credits
 
 This project exists because Pockethernet v1 users on macOS have no official native firmware updater available.
-
-The updater was tested with Pockethernet v1 firmware v33 on macOS.
