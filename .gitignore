@@ -4,5 +4,18 @@ pockethernet-v*-fwupgrade*
 *.tar.gz
 *.zip
 
+# Local output and debug files
+*.log
+*.bin
+*.hex
+*.dump
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
 # macOS
 .DS_Store
