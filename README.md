@@ -1,5 +1,7 @@
 # Pockethernet v1 macOS firmware updater
 
+[![GitHub Release](https://img.shields.io/github/v/release/emtronictech/pockethernet-v1-macos-updater?include_prereleases&style=for-the-badge)](https://github.com/emtronictech/pockethernet-v1-macos-updater/releases)
+
 ⚠️ **Use at your own risk.**
 
 Unofficial Python firmware updater for Pockethernet v1 on macOS.
