@@ -14,7 +14,7 @@ Pockethernet provides official firmware update tools for Windows and Linux, but 
 
 The official Linux updater is distributed as a Linux executable. macOS cannot run this executable directly because it is not a macOS binary.
 
-This project provides a small Python based updater that works natively on macOS by using `pyserial` to communicate with the Pockethernet over USB.
+This project provides a Python based updater that works natively on macOS by using `pyserial` to communicate with the Pockethernet over USB.
 
 ## ⚠️ Important warning
 
@@ -32,49 +32,17 @@ You must download the official Pockethernet Linux updater yourself from the offi
 
 https://pockethernet.com/firmware.html
 
-The official firmware updater is intentionally not included in this repository.
+The official firmware updater is intentionally not included here.
 
-The MIT License in this repository only applies to the code in this repository. Pockethernet firmware and official Pockethernet updater binaries remain property of their respective owners.
+The MIT License in this project only applies to the code provided here. Pockethernet firmware and official Pockethernet updater binaries remain property of their respective owners.
 
 ## Supported firmware versions
 
-<table>
-  <thead>
-    <tr>
-      <th>Firmware version</th>
-      <th>Status</th>
-      <th>Folder</th>
-      <th>Script</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>v33</td>
-      <td>Tested</td>
-      <td><code>v33/</code></td>
-      <td><code>pockethernet_v33_macos_updater.py</code></td>
-    </tr>
-  </tbody>
-</table>
+| Firmware version | Status | Updater source                                                                   | Instructions                     |
+| ---------------- | ------ | -------------------------------------------------------------------------------- | -------------------------------- |
+| v33              | Tested | [`v33/pockethernet_v33_macos_updater.py`](v33/pockethernet_v33_macos_updater.py) | [`v33/README.md`](v33/README.md) |
 
-Future firmware versions can be added in their own version folder, for example `v34/`, when their official updater layout has been inspected and tested.
-
-## Repository structure
-
-```text
-pockethernet-v1-macos-updater/
-  README.md
-  LICENSE
-  .gitignore
-
-  v33/
-    README.md
-    pockethernet_v33_macos_updater.py
-```
-
-The root README gives a general overview of the project.
-
-Each firmware version folder contains its own README with version specific usage instructions.
+Future firmware versions can be added when their official updater layout has been inspected and tested.
 
 ## Requirements
 
@@ -88,6 +56,20 @@ Pockethernet v1
 Official Pockethernet v1 Linux firmware updater for the matching firmware version
 ```
 
+Install `pyserial` with pip:
+
+```bash
+python3 -m pip install pyserial
+```
+
+For version specific usage instructions, open the README for the firmware version you want to install.
+
+For v33:
+
+[`v33/README.md`](v33/README.md)
+
+## Basic usage overview
+
 For v33, download the official Pockethernet v33 Linux updater from:
 
 https://pockethernet.com/firmware.html
@@ -98,37 +80,9 @@ The required official updater file is expected to be:
 pockethernet-v33-fwupgrade
 ```
 
-The official updater file is not included in this repository.
+Place the official updater file next to the matching Python updater script on your Mac.
 
-## Installing pyserial
-
-Install `pyserial` with pip:
-
-```bash
-python3 -m pip install pyserial
-```
-
-If you use a virtual environment, activate it first and then install `pyserial`.
-
-## Basic usage
-
-Go to the folder for the firmware version you want to install.
-
-For v33:
-
-```bash
-cd v33
-```
-
-Place the official Pockethernet Linux updater file next to the Python script:
-
-```text
-v33/
-  pockethernet_v33_macos_updater.py
-  pockethernet-v33-fwupgrade
-```
-
-List available serial ports:
+Then list available serial ports:
 
 ```bash
 python3 pockethernet_v33_macos_updater.py --list-ports
@@ -203,44 +157,11 @@ Little endian command values
 
 The v33 script is intentionally version specific. It expects the known v33 updater layout and refuses to continue if the expected firmware payloads cannot be extracted.
 
-## Firmware files are intentionally ignored
-
-The `.gitignore` should exclude official Pockethernet updater and firmware files.
-
-Recommended extra entries:
-
-```gitignore
-# Pockethernet official updater and firmware files
-pockethernet-v*-fwupgrade
-pockethernet-v*-fwupgrade*
-*.tar.gz
-*.zip
-
-# Local output and debug files
-*.log
-*.bin
-*.hex
-*.dump
-
-# macOS
-.DS_Store
-```
-
-This helps prevent accidental redistribution of official Pockethernet firmware or updater files.
-
 ## Adding support for another firmware version
 
-Support for another firmware version should be added in a separate folder.
+Support for another firmware version should only be added after the official Linux updater for that version has been inspected and tested.
 
-Example:
-
-```text
-v34/
-  README.md
-  pockethernet_v34_macos_updater.py
-```
-
-Before adding a new version, the official Linux updater for that version should be inspected and tested. Do not assume that firmware versions share the same embedded payload offsets or update layout.
+Do not assume that firmware versions share the same embedded payload offsets or update layout.
 
 A new version should only be marked as tested after it has been successfully used on a real Pockethernet v1.
 
@@ -248,44 +169,15 @@ A new version should only be marked as tested after it has been successfully use
 
 Before flashing, check the following:
 
-<table>
-  <thead>
-    <tr>
-      <th>Check</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Official updater file</td>
-      <td>Download the official Pockethernet Linux updater from https://pockethernet.com/firmware.html</td>
-    </tr>
-    <tr>
-      <td>Matching version</td>
-      <td>Use the script that matches the firmware version</td>
-    </tr>
-    <tr>
-      <td>Dry run</td>
-      <td>Run the dry run command first</td>
-    </tr>
-    <tr>
-      <td>USB cable</td>
-      <td>Use a reliable USB cable</td>
-    </tr>
-    <tr>
-      <td>Power</td>
-      <td>Keep your Mac connected to power if possible</td>
-    </tr>
-    <tr>
-      <td>Sleep mode</td>
-      <td>Do not let your Mac go to sleep during flashing</td>
-    </tr>
-    <tr>
-      <td>Connection</td>
-      <td>Do not disconnect the Pockethernet during flashing</td>
-    </tr>
-  </tbody>
-</table>
+| Check                 | Description                                                                                  |
+| --------------------- | -------------------------------------------------------------------------------------------- |
+| Official updater file | Download the official Pockethernet Linux updater from https://pockethernet.com/firmware.html |
+| Matching version      | Use the script that matches the firmware version                                             |
+| Dry run               | Run the dry run command first                                                                |
+| USB cable             | Use a reliable USB cable                                                                     |
+| Power                 | Keep your Mac connected to power if possible                                                 |
+| Sleep mode            | Do not let your Mac go to sleep during flashing                                              |
+| Connection            | Do not disconnect the Pockethernet during flashing                                           |
 
 If the update fails, do not repeatedly retry with random files or unknown firmware versions. Use only the matching official updater file for the script version.
 
@@ -293,7 +185,7 @@ If the update fails, do not repeatedly retry with random files or unknown firmwa
 
 This project is licensed under the MIT License.
 
-The license only applies to the code in this repository. Pockethernet firmware and official Pockethernet updater binaries are not included and are not covered by this license.
+The license only applies to the code in this project. Pockethernet firmware and official Pockethernet updater binaries are not included and are not covered by this license.
 
 ## Credits
 
